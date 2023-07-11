@@ -22,23 +22,27 @@ const config = {
   },
   mini: {
     webpackChain(chain) {
-      chain.optimization.splitChunks({
-        chunks: "all",
-        maxInitialRequests: Infinity,
-        minSize: 0,
-        cacheGroups: {
-          common: {
-            name: "common",
-            minChunks: 2,
-            priority: 1,
-          },
-          vendors: {
-            name: "vendors",
-            minChunks: 2,
-            test: (module) => {
-              return /[\\/]node_modules[\\/]/.test(module.resource);
+      chain.merge({
+        optimization: {
+          splitChunks: {
+            chunks: "all",
+            maxInitialRequests: Infinity,
+            minSize: 0,
+            cacheGroups: {
+              common: {
+                name: "common",
+                minChunks: 2,
+                priority: 1,
+              },
+              vendors: {
+                name: "vendors",
+                minChunks: 2,
+                test: (module) => {
+                  return /[\\/]node_modules[\\/]/.test(module.resource);
+                },
+                priority: 10,
+              },
             },
-            priority: 10,
           },
         },
       });
